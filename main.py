@@ -7,11 +7,14 @@ Created on Mon Feb 24 21:00:22 2020
 
 
 from __future__ import absolute_import, division, print_function, unicode_literals
-import functools
+
+from sklearn.preprocessing import StandardScaler
 
 import numpy as np
 import tensorflow as tf
 import pandas as pd
+
+from preprocess import *
 
 
 col_names = ["duration","protocol_type","service","flag","src_bytes",
@@ -25,19 +28,12 @@ col_names = ["duration","protocol_type","service","flag","src_bytes",
     "dst_host_srv_diff_host_rate","dst_host_serror_rate","dst_host_srv_serror_rate",
     "dst_host_rerror_rate","dst_host_srv_rerror_rate","label"]
 
+print('NSL-KDD dataset preprocessor', end='\n\n')
+service_list = get_service_list(dirname='list', filename='service.txt')
+flag_list = get_flag_list(dirname='list', filename='flag.txt')
+
 
 train_data = pd.read_csv('D:/NDSU/Research/Project/NSL-KDD/KDDTrain+.txt',header=None, names = col_names)
 test_data = pd.read_csv('D:/NDSU/Research/Project/NSL-KDD/KDDTest+.txt',header=None, names = col_names)
 
 
-print (train_data.head(5))
-# shape, this gives the dimensions of the dataset
-print('Dimensions of the Training set:',train_data.shape)
-print('Dimensions of the Test set:',test_data.shape)
-
-#label distribution in training set
-print('Label distribution Training set:')
-print(train_data['label'].value_counts())
-print()
-print('Label distribution Test set:')
-print(test_data['label'].value_counts())
