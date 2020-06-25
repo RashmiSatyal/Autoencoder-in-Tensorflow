@@ -1,0 +1,123 @@
+Skip to content
+Search or jump to…
+
+Pull requests
+Issues
+Marketplace
+Explore
+ 
+@RashmiSatyal 
+Learn Git and GitHub without any code!
+Using the Hello World guide, you’ll start a branch, write comments, and open a pull request.
+
+
+kyuyeonpooh
+/
+nsl-kdd-autoencoder
+1
+1
+0
+ Code Issues 0 Pull requests 0 Actions Projects 0 Wiki Security Insights
+nsl-kdd-autoencoder/preprocess/list/service.txt
+@kyuyeonpooh kyuyeonpooh Reorganize project folder
+534eebc on Oct 24, 2019
+86 lines (86 sloc)  564 Bytes
+  
+vmnet
+smtp
+ntp_u
+shell
+kshell
+aol
+imap4
+urh_i
+netbios_ssn
+tftp_u
+mtp
+uucp
+nnsp
+echo
+tim_i
+ssh
+iso_tsap
+time
+netbios_ns
+systat
+hostnames
+login
+efs
+supdup
+http_8001
+courier
+crf
+finger
+nntp
+ftp_data
+red_i
+ldap
+http
+ftp
+pm_dump
+exec
+klogin
+auth
+netbios_dgm
+other
+link
+X11
+discard
+private
+remote_job
+IRC
+daytime
+pop_3
+pop_2
+gopher
+sunrpc
+name
+rje
+domain
+uucp_path
+http_2784
+Z39_70
+domain_u
+csnet_ns
+whois
+eco_i
+bgp
+sql_net
+printer
+telnet
+ecr_i
+urp_i
+netstat
+http_443
+harvest
+rdp
+dns
+sip
+smtp,ssl
+snmp
+ssl
+dhcp
+krb_tcp
+ftp-data
+radius
+dns,sip
+http,ssh
+krb
+irc
+Z39_50
+ctf
+© 2020 GitHub, Inc.
+Terms
+Privacy
+Security
+Status
+Help
+Contact GitHub
+Pricing
+API
+Training
+Blog
+About
