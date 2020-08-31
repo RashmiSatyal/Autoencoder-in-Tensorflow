@@ -18,7 +18,8 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Activation
 
 from preprocess import *
-from featurepreparation import *
+#from featurepreparation import *
+#from model import *
 
 
 col_names = ["duration","protocol_type","service","flag","src_bytes",
