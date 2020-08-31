@@ -34,27 +34,28 @@ def get_data_frame(dirname = 'dataset', filename = None):
     df = pd.read_csv(os.path.join(dirname, filename), header=None)
     return df
 
-def to_numeric(data_frame, service_list, flag_list, test = False, attack = False, save = True):
+def to_numeric(data_frame, service_list, flag_list, test = False, attack = False, save = False):
     df = data_frame
     # index 1: protocol_type
     print('Converting protocol_type values to numeric....')
-    df[1].replace(['tcp', 'udp', 'icmp'], range(3), inplace=True)
+#    print(df[1])
+    df['protocol_type'].replace(['tcp', 'udp', 'icmp'], range(3), inplace=True)
     
     # index 2: service
     print('Replacing service values to numeric...')
-    df[2].replace(service_list, range(len(service_list)), inplace=True)
+    df['service'].replace(service_list, range(len(service_list)), inplace=True)
 
     # index 3: flag
     print('Replacing flag values to numeric...')
-    df[3].replace(flag_list, range(len(flag_list)), inplace=True)
-
-    if not test:
-        # extract only the same features from Kyoto 2006+ dataset
-        df = df.loc[:, [0, 1, 2, 3, 4, 5, 22, 24, 25, 28, 31, 32, 35, 37, 38]]
-    else:
-        # include label
-        df = df.loc[:, [0, 1, 2, 3, 4, 5, 22, 24, 25, 28, 31, 32, 35, 37, 38, 41]]
-        df[41] = df[41].map(lambda x: 0 if x == 'normal' else 1)  # normal 0, attack 1
+    df['flag'].replace(flag_list, range(len(flag_list)), inplace=True)
+#feature extraction
+#    if not test:
+#        # extract only the same features from Kyoto 2006+ dataset
+#        df = df.loc[:, [0, 1, 2, 3, 4, 5, 22, 24, 25, 28, 31, 32, 35, 37, 38]]
+#    else:
+#        # include label
+#        df = df.loc[:, [0, 1, 2, 3, 4, 5, 22, 24, 25, 28, 31, 32, 35, 37, 38, 41]]
+#        df[41] = df[41].map(lambda x: 0 if x == 'normal' else 1)  # normal 0, attack 1
     
     # save as csv file
     if save:
