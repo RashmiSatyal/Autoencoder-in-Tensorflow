@@ -18,7 +18,7 @@ import numpy as np
 #y:classification
 #y0 holds the classification of the training dataset to one of two possible 
     #labels, 0 for normal traffic or 1 for an attack
-def getModel():
+def getModel(x):
     inp = Input(shape=(x.shape[1],))
     d1=Dropout(0.5)(inp)
     encoded = Dense(8, activation='relu', activity_regularizer=regularizers.l2(10e-5))(d1)
@@ -27,10 +27,3 @@ def getModel():
     autoencoder.compile(optimizer='adam', loss='mean_squared_error')
     return autoencoder
 
-autoencoder=getModel()
-history=autoencoder.fit(x[np.where(y0==0)],x[np.where(y0==0)],
-               epochs=10,
-                batch_size=100,
-                shuffle=True,
-                validation_split=0.1
-                       )

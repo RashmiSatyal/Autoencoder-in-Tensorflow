@@ -9,6 +9,7 @@ Created on Mon Feb 24 21:00:22 2020
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import confusion_matrix,accuracy_score,recall_score,precision_score,f1_score
 
 import numpy as np
 import tensorflow as tf
@@ -19,7 +20,8 @@ from tensorflow.keras.layers import Dense, Activation
 
 from preprocess import *
 #from featurepreparation import *
-#from model import *
+from model import *
+from predictions import *
 
 
 col_names = ["duration","protocol_type","service","flag","src_bytes",
@@ -49,7 +51,8 @@ test_outcome = test_data.label.unique()
 print("The test set has {} possible outcomes \n".format(len(test_outcome)) )
 
 
-train_data_processes = to_numeric(train_data, service_list, flag_list)
+train_data = to_numeric(train_data, service_list, flag_list)
+test_data = to_numeric(test_data, service_list, flag_list)
 
 #print(train_data_processes)
 
@@ -67,29 +70,60 @@ classes=["Normal","Dos","R2L","U2R","Probe"]
 
 #Helper function to label samples to 5 classes
 def label_attack (row):
-    if row["outcome"] in dos_attacks:
+    if row["label"] in dos_attacks:
         return classes[1]
-    if row["outcome"] in r2l_attacks:
+    if row["label"] in r2l_attacks:
         return classes[2]
-    if row["outcome"] in u2r_attacks:
+    if row["label"] in u2r_attacks:
         return classes[3]
-    if row["outcome"] in probe_attacks:
+    if row["label"] in probe_attacks:
         return classes[4]
     return classes[0]
+
+#Combijne the datasets temporarily to do the labeling 
+test_samples_length = len(test_data)
+df=pd.concat([train_data,test_data])
+df["Class"]=df.apply(label_attack,axis=1)
 
 #TODO: Scale continuous values
 #TODO: Choose encoding method
 
+# The old outcome field is dropped since it was replaced with the Class field, the difficulty field will be dropped as well.
+df=df.drop("label",axis=1)
 
 
+# we again split the data into training and test sets.
+train_data= df.iloc[:-test_samples_length, :]
+test_data= df.iloc[-test_samples_length:,:]
 
-#TODO: review code below (x holds features, y holds clasification)
+
+#TODO: convert object arrays
+
     
-#x,y=train_data,train_data.pop("Class").values
-#x=x.values
-#x_test,y_test=test_data,test_data.pop("Class").values
-#x_test=x_test.values
-#y0=np.ones(len(y),np.int8)
-#y0[np.where(y==classes[0])]=0
-#y0_test=np.ones(len(y_test),np.int8)
-#y0_test[np.where(y_test==classes[0])]=0
+x,y=train_data,train_data.pop("Class").values
+x=x.values
+x_test,y_test=test_data,test_data.pop("Class").values
+x_test=x_test.values
+y0=np.ones(len(y),np.int8)
+y0[np.where(y==classes[0])]=0
+y0_test=np.ones(len(y_test),np.int8)
+y0_test[np.where(y_test==classes[0])]=0
+
+autoencoder = getModel(x)
+history=autoencoder.fit(x[np.where(y0==0)],x[np.where(y0==0)],
+               epochs=10,
+                batch_size=100,
+                shuffle=True,
+                validation_split=0.1
+                       )
+
+# We set the threshold equal to the training loss of the autoencoder
+threshold=history.history["loss"][-1]
+
+testing_set_predictions=autoencoder.predict(x_test)
+test_losses=calculate_losses(x_test,testing_set_predictions)
+testing_set_predictions=np.zeros(len(test_losses))
+testing_set_predictions[np.where(test_losses>threshold)]=1
+
+
+accuracy=accuracy_score(y0_test,testing_set_predictions)

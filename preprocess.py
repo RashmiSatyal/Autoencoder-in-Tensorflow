@@ -38,7 +38,7 @@ def to_numeric(data_frame, service_list, flag_list, test = False, attack = False
     df = data_frame
     # index 1: protocol_type
     print('Converting protocol_type values to numeric....')
-#    print(df[1])
+
     df['protocol_type'].replace(['tcp', 'udp', 'icmp'], range(3), inplace=True)
     
     # index 2: service
