@@ -30,7 +30,7 @@ def encode_text(training_df,testing_df, name):
     training_df.drop(name, axis=1, inplace=True)
     testing_df.drop(name, axis=1, inplace=True)
     
-#TODO: make df name corrections    
+#TODO: take this to main.py    
 sympolic_columns=["protocol_type","service","flag"]
 label_column="Class"
 for column in df.columns :
