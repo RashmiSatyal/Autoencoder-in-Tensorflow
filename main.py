@@ -22,6 +22,7 @@ from preprocess import *
 #from featurepreparation import *
 from model import *
 from predictions import *
+from plot import *
 
 
 col_names = ["duration","protocol_type","service","flag","src_bytes",
@@ -127,3 +128,7 @@ testing_set_predictions[np.where(test_losses>threshold)]=1
 
 
 accuracy=accuracy_score(y0_test,testing_set_predictions)
+
+#inline plot
+c = confusion_matrix(y0_test,testing_set_predictions)
+plot_confusion_matrix(c,["Normal","Attack"])
