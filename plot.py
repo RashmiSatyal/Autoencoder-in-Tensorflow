@@ -35,3 +35,11 @@ def plot_confusion_matrix(cm, classes,
     plt.tight_layout()
     plt.ylabel('True label')
     plt.xlabel('Predicted label')
+    
+#TODO: violin plot not working as expected. Make correction     
+def violin_plot(classes,test_losses, y_test, threshold,):
+    plt.ylabel('Loss')
+    plt.xticks(np.arange(0,5), classes)
+    plt.violinplot([test_losses[np.where(y_test==class_)] for class_ in classes],np.arange(0,len(classes)),showmeans =True )
+    plt.axhline(y=threshold,c='r',label="Threshold Value")
+    plt.legend();

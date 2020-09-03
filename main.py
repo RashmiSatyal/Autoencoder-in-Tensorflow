@@ -132,3 +132,4 @@ accuracy=accuracy_score(y0_test,testing_set_predictions)
 #inline plot
 c = confusion_matrix(y0_test,testing_set_predictions)
 plot_confusion_matrix(c,["Normal","Attack"])
+#violin_plot(["Normal","Attack"], test_losses, y_test, threshold)
