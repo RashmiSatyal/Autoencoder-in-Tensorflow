@@ -10,7 +10,7 @@ import pandas as pd
 import numpy as np
 
 #import h5py
-
+#TODO: see if this file is needed
 from sklearn.preprocessing import OneHotEncoder, MinMaxScaler
 from sklearn.utils import shuffle
 
