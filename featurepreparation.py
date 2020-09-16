@@ -10,10 +10,10 @@ import numpy as np
 
 def minmax_scale_values(training_df,testing_df, col_name):
     scaler = MinMaxScaler()
-    scaler = scaler.fit(training_df[col_name].reshape(-1, 1))
-    train_values_standardized = scaler.transform(training_df[col_name].reshape(-1, 1))
+    scaler = scaler.fit(training_df[col_name].values.reshape(-1, 1))
+    train_values_standardized = scaler.transform(training_df[col_name].values.reshape(-1, 1))
     training_df[col_name] = train_values_standardized
-    test_values_standardized = scaler.transform(testing_df[col_name].reshape(-1, 1))
+    test_values_standardized = scaler.transform(testing_df[col_name].values.reshape(-1, 1))
     testing_df[col_name] = test_values_standardized
     
 #One HotEncoding
@@ -30,11 +30,3 @@ def encode_text(training_df,testing_df, name):
     training_df.drop(name, axis=1, inplace=True)
     testing_df.drop(name, axis=1, inplace=True)
     
-#TODO: take this to main.py    
-sympolic_columns=["protocol_type","service","flag"]
-label_column="Class"
-for column in df.columns :
-    if column in sympolic_columns:
-        encode_text(training_df,testing_df,column)
-    elif not column == label_column:
-        minmax_scale_values(training_df,testing_df, column)

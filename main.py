@@ -19,7 +19,7 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Activation
 
 from preprocess import *
-#from featurepreparation import *
+from featurepreparation import *
 from model import *
 from predictions import *
 from plot import *
@@ -81,7 +81,7 @@ def label_attack (row):
         return classes[4]
     return classes[0]
 
-#Combijne the datasets temporarily to do the labeling 
+#Combine the datasets temporarily to do the labeling 
 test_samples_length = len(test_data)
 df=pd.concat([train_data,test_data])
 df["Class"]=df.apply(label_attack,axis=1)
@@ -96,6 +96,15 @@ df=df.drop("label",axis=1)
 # we again split the data into training and test sets.
 train_data= df.iloc[:-test_samples_length, :]
 test_data= df.iloc[-test_samples_length:,:]
+
+  
+sympolic_columns=["protocol_type","service","flag"]
+label_column="Class"
+for column in df.columns :
+    if column in sympolic_columns:
+        encode_text(train_data,test_data,column)
+    elif not column == label_column:
+        minmax_scale_values(train_data,test_data, column)
 
 
 #TODO: convert object arrays
