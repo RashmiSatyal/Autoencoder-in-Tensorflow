@@ -20,8 +20,8 @@ import numpy as np
     #labels, 0 for normal traffic or 1 for an attack
 def getModel(x):
     inp = Input(shape=(x.shape[1],))
-    d1=Dropout(0.5)(inp)
-    encoded = Dense(8, activation='relu', activity_regularizer=regularizers.l2(10e-5))(d1)
+    d1=Dropout(0.2)(inp)
+    encoded = Dense(10, activation='relu', activity_regularizer=regularizers.l2(10e-5))(d1)
     decoded = Dense(x.shape[1], activation='relu')(encoded)
     autoencoder = Model(inp, decoded)
     autoencoder.compile(optimizer='adam', loss='mean_squared_error')
