@@ -30,3 +30,4 @@ def encode_text(training_df,testing_df, name):
     training_df.drop(name, axis=1, inplace=True)
     testing_df.drop(name, axis=1, inplace=True)
     
+#TODO: Feature extraction (Identify dominant features for different attack types)
