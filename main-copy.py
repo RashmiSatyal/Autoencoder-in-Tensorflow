@@ -174,7 +174,6 @@ scaler8 = preprocessing.StandardScaler().fit(X_U2R_test)
 X_U2R_test=scaler8.transform(X_U2R_test)
 
 
-print(X_U2R.std(axis=0))
 
 
 x,y=train_data,train_data.pop("Class").values
