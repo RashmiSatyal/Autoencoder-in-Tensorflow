@@ -10,6 +10,7 @@ Created on Sun Oct  4 10:39:00 2020
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+from sklearn import preprocessing
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import confusion_matrix,accuracy_score,recall_score,precision_score,f1_score
 
@@ -122,7 +123,60 @@ DoS_df_test = test_data[test_data.Class == 'Dos']
 Probe_df_test = test_data[test_data.Class == 'Probe']
 R2L_df_test = test_data[test_data.Class == 'R2L']
 U2R_df_test = test_data[test_data.Class == 'U2R'] 
-   
+
+# =============================================================================
+# 
+# Feature scaling
+# 
+# =============================================================================
+# Split dataframes into X & Y
+# assign X as a dataframe of feautures and Y as a series of outcome variables
+X_DoS = DoS_df_train.drop('Class', 1)
+Y_DoS = DoS_df_train.Class
+X_Probe = Probe_df_train.drop('Class',1)
+Y_Probe = Probe_df_train.Class
+X_R2L = R2L_df_train.drop('Class',1)
+Y_R2L = R2L_df_train.Class
+X_U2R = U2R_df_train.drop('Class',1)
+Y_U2R = U2R_df_train.Class
+
+
+X_DoS_test = DoS_df_test.drop('Class', 1)
+Y_DoS_test = DoS_df_test.Class
+X_Probe_test = Probe_df_test.drop('Class',1)
+Y_Probe_test = Probe_df_test.Class
+X_R2L_test = R2L_df_test.drop('Class',1)
+Y_R2L_test = R2L_df_test.Class
+X_U2R_test = U2R_df_test.drop('Class',1)
+Y_U2R_test = U2R_df_test.Class
+
+
+columns=list(X_DoS)
+columns_test=list(X_DoS_test)
+
+#Scale df using StandardScalar()
+scaler1 = preprocessing.StandardScaler().fit(X_DoS)
+X_DoS=scaler1.transform(X_DoS) 
+scaler2 = preprocessing.StandardScaler().fit(X_Probe)
+X_Probe=scaler2.transform(X_Probe) 
+scaler3 = preprocessing.StandardScaler().fit(X_R2L)
+X_R2L=scaler3.transform(X_R2L) 
+scaler4 = preprocessing.StandardScaler().fit(X_U2R)
+X_U2R=scaler4.transform(X_U2R) 
+# test data
+scaler5 = preprocessing.StandardScaler().fit(X_DoS_test)
+X_DoS_test=scaler5.transform(X_DoS_test) 
+scaler6 = preprocessing.StandardScaler().fit(X_Probe_test)
+X_Probe_test=scaler6.transform(X_Probe_test) 
+scaler7 = preprocessing.StandardScaler().fit(X_R2L_test)
+X_R2L_test=scaler7.transform(X_R2L_test) 
+scaler8 = preprocessing.StandardScaler().fit(X_U2R_test)
+X_U2R_test=scaler8.transform(X_U2R_test)
+
+
+print(X_U2R.std(axis=0))
+
+
 x,y=train_data,train_data.pop("Class").values
 x=x.values
 x_test,y_test=test_data,test_data.pop("Class").values
