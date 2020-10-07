@@ -26,6 +26,7 @@ from featurepreparation import *
 from model import *
 from predictions import *
 from plot import *
+from featureselection import *
 
 
 col_names = ["duration","protocol_type","service","flag","src_bytes",
@@ -173,7 +174,8 @@ X_R2L_test=scaler7.transform(X_R2L_test)
 scaler8 = preprocessing.StandardScaler().fit(X_U2R_test)
 X_U2R_test=scaler8.transform(X_U2R_test)
 
-
+X_new_DoS = X_newDoS(X_DoS,Y_DoS)
+newcolname_DoS = newcolname_DoS(columns)
 
 
 x,y=train_data,train_data.pop("Class").values
