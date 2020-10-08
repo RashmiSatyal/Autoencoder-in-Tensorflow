@@ -12,6 +12,7 @@ Created on Mon Oct  5 21:21:23 2020
 # =============================================================================
 
 from sklearn.feature_selection import SelectPercentile, f_classif
+import numpy as np
 
 #univariate feature selection with ANOVA F-test. using secondPercentile method, then RFE
 #Scikit-learn exposes feature selection routines as objects that implement the transform method
@@ -21,11 +22,12 @@ from sklearn.feature_selection import SelectPercentile, f_classif
 def X_newDoS(X_DoS,Y_DoS):
     np.seterr(divide='ignore', invalid='ignore')
     selector = SelectPercentile(f_classif,percentile=10)
-    return(selector.fit_transform(X_DoS,Y_DoS))
+    X_newDoS = selector.fit_transform(X_DoS,Y_DoS)
     
 def newcolname_DoS(columns):
     selector = SelectPercentile(f_classif,percentile=10)
     true = selector.get_support
     newcolindex_DoS = [i for i, x in enumerate(true) if x]
-    return(list( columns[i] for i in newcolindex_DoS )) 
+    newcolnames_DoS = list(columns[i] for i in newcolindex_DoS)
     
+

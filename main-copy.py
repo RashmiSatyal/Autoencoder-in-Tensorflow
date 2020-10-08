@@ -12,6 +12,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from sklearn import preprocessing
 from sklearn.preprocessing import StandardScaler
+from sklearn.feature_selection import SelectPercentile, f_classif
 from sklearn.metrics import confusion_matrix,accuracy_score,recall_score,precision_score,f1_score
 
 import numpy as np
@@ -26,7 +27,7 @@ from featurepreparation import *
 from model import *
 from predictions import *
 from plot import *
-from featureselection import *
+#from featureselection import *
 
 
 col_names = ["duration","protocol_type","service","flag","src_bytes",
@@ -174,10 +175,42 @@ X_R2L_test=scaler7.transform(X_R2L_test)
 scaler8 = preprocessing.StandardScaler().fit(X_U2R_test)
 X_U2R_test=scaler8.transform(X_U2R_test)
 
-X_new_DoS = X_newDoS(X_DoS,Y_DoS)
-newcolname_DoS = newcolname_DoS(columns)
+
+#Feature selection based on attack types
+
+#DoS attack features
+#X_new_DoS = X_newDoS(X_DoS,Y_DoS)
+#newcolname_DoS = newcolname_DoS(columns)
+
+#np.seterr(divide='ignore', invalid='ignore')
+selector = SelectPercentile(f_classif, percentile=10)
+X_newDoS = selector.fit_transform(X_DoS,Y_DoS)
+
+true=selector.get_support()
+newcolindex_DoS = [i for i, x in enumerate(true) if x]
+newcolname_DoS = list(columns[i] for i in newcolindex_DoS)
+
+#Probe attack features
+X_newProbe = selector.fit_transform(X_Probe,Y_Probe)
+true=selector.get_support()
+newcolindex_Probe = [i for i, x in enumerate(true) if x]
+newcolname_Probe = list(columns[i] for i in newcolindex_Probe)
+
+#R2L attack features
+X_newR2L = selector.fit_transform(X_R2L,Y_R2L)
+
+true=selector.get_support()
+newcolindex_R2L = [i for i, x in enumerate(true) if x]
+newcolname_R2L = list(columns[i] for i in newcolindex_R2L)
+
+#U2R attack features
+X_newU2R = selector.fit_transform(X_U2R,Y_U2R)
+true=selector.get_support()
+newcolindex_U2R = [i for i, x in enumerate(true) if x]
+newcolname_U2R = list(columns[i] for i in newcolindex_U2R)
 
 
+#Training
 x,y=train_data,train_data.pop("Class").values
 x=x.values
 x_test,y_test=test_data,test_data.pop("Class").values
