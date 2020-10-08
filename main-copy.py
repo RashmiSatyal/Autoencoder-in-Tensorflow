@@ -8,7 +8,7 @@ Created on Sun Oct  4 10:39:00 2020
 
 
 
-from __future__ import absolute_import, division, print_function, unicode_literals
+from __future__ import absolute_import, division, print_function,unicode_literals
 
 from sklearn import preprocessing
 from sklearn.preprocessing import StandardScaler
@@ -37,8 +37,10 @@ col_names = ["duration","protocol_type","service","flag","src_bytes",
     "is_host_login","is_guest_login","count","srv_count","serror_rate",
     "srv_serror_rate","rerror_rate","srv_rerror_rate","same_srv_rate",
     "diff_srv_rate","srv_diff_host_rate","dst_host_count","dst_host_srv_count",
-    "dst_host_same_srv_rate","dst_host_diff_srv_rate","dst_host_same_src_port_rate",
-    "dst_host_srv_diff_host_rate","dst_host_serror_rate","dst_host_srv_serror_rate",
+    "dst_host_same_srv_rate","dst_host_diff_srv_rate",
+    "dst_host_same_src_port_rate",
+    "dst_host_srv_diff_host_rate","dst_host_serror_rate",
+    "dst_host_srv_serror_rate",
     "dst_host_rerror_rate","dst_host_srv_rerror_rate","label"]
 
 print('NSL-KDD dataset preprocessor', end='\n\n')
@@ -46,11 +48,14 @@ service_list = get_service_list(dirname='list', filename='service.txt')
 flag_list = get_flag_list(dirname='list', filename='flag.txt')
 
 #remove column label from training and test
-train_data = pd.read_csv('D:/NDSU/Research/Project/NSL-KDD/KDDTrain+.txt',header=None, names = col_names, index_col = False)
-test_data = pd.read_csv('D:/NDSU/Research/Project/NSL-KDD/KDDTest+.txt',header=None, names = col_names, index_col = False)
+train_data = pd.read_csv('D:/NDSU/Research/Project/NSL-KDD/KDDTrain+.txt',
+                         header=None, names = col_names, index_col = False)
+test_data = pd.read_csv('D:/NDSU/Research/Project/NSL-KDD/KDDTest+.txt',
+                        header=None, names = col_names, index_col = False)
 
 training_outcome = train_data.label.unique()
-print("The training set has {} possible outcomes \n".format(len(training_outcome)) )
+print("The training set has {} possible outcomes \n"
+      .format(len(training_outcome)) )
 print(sorted(training_outcome))
 
 test_outcome = test_data.label.unique()
@@ -64,9 +69,13 @@ test_data = to_numeric(test_data, service_list, flag_list)
 
 
 
-dos_attacks=["snmpgetattack","back","land","neptune","smurf","teardrop","pod","apache2","udpstorm","processtable","mailbomb"]
-r2l_attacks=["snmpguess","worm","httptunnel","named","xlock","xsnoop","sendmail","ftp_write","guess_passwd","imap","multihop","phf","spy","warezclient","warezmaster"]
-u2r_attacks=["sqlattack","buffer_overflow","loadmodule","perl","rootkit","xterm","ps"]
+dos_attacks=["snmpgetattack","back","land","neptune","smurf","teardrop","pod",
+             "apache2","udpstorm","processtable","mailbomb"]
+r2l_attacks=["snmpguess","worm","httptunnel","named","xlock","xsnoop",
+             "sendmail","ftp_write","guess_passwd","imap","multihop","phf",
+             "spy","warezclient","warezmaster"]
+u2r_attacks=["sqlattack","buffer_overflow","loadmodule","perl","rootkit",
+             "xterm","ps"]
 probe_attacks=["ipsweep","nmap","portsweep","satan","saint","mscan"]
 
 # New labels 
@@ -95,7 +104,8 @@ df["Class"]=df.apply(label_attack,axis=1)
 #TODO: Scale continuous values
 #TODO: Choose encoding method
 
-# The old outcome field is dropped since it was replaced with the Class field, the difficulty field will be dropped as well.
+# The old outcome field is dropped since it was replaced with the Class field,
+# the difficulty field will be dropped as well.
 df=df.drop("label",axis=1)
 
 
@@ -115,6 +125,7 @@ for column in df.columns :
 train_header = train_data.head()
 test_header = test_data.head()
 #TODO: convert object arrays
+#TODO: each df should contain not only data from the specific
 
 DoS_df_train = train_data[train_data.Class == 'Dos']
 Probe_df_train = train_data[train_data.Class == 'Probe']
@@ -133,6 +144,7 @@ U2R_df_test = test_data[test_data.Class == 'U2R']
 # =============================================================================
 # Split dataframes into X & Y
 # assign X as a dataframe of feautures and Y as a series of outcome variables
+
 X_DoS = DoS_df_train.drop('Class', 1)
 Y_DoS = DoS_df_train.Class
 X_Probe = Probe_df_train.drop('Class',1)
@@ -184,6 +196,7 @@ X_U2R_test=scaler8.transform(X_U2R_test)
 
 #np.seterr(divide='ignore', invalid='ignore')
 selector = SelectPercentile(f_classif, percentile=10)
+
 X_newDoS = selector.fit_transform(X_DoS,Y_DoS)
 
 true=selector.get_support()
