@@ -125,17 +125,22 @@ for column in df.columns :
 train_header = train_data.head()
 test_header = test_data.head()
 #TODO: convert object arrays
-#TODO: each df should contain not only data from the specific
+#TODO: each df should contain not only data from the specific attack but also
+#normal data
 
-DoS_df_train = train_data[train_data.Class == 'Dos']
-Probe_df_train = train_data[train_data.Class == 'Probe']
-R2L_df_train = train_data[train_data.Class == 'R2L']
-U2R_df_train = train_data[train_data.Class == 'U2R'] 
+DoSClass = ['Dos', 'Normal']
+ProbeClass = ['Probe', 'Normal']
+R2LClass = ['R2L', 'Normal']
+U2RClass = ['U2R', 'Normal']
+DoS_df_train = train_data[train_data.Class.isin(DoSClass)]
+Probe_df_train = train_data[train_data.Class.isin(ProbeClass)]
+R2L_df_train = train_data[train_data.Class.isin(R2LClass)]
+U2R_df_train = train_data[train_data.Class.isin(U2RClass)] 
 
-DoS_df_test = test_data[test_data.Class == 'Dos']
-Probe_df_test = test_data[test_data.Class == 'Probe']
-R2L_df_test = test_data[test_data.Class == 'R2L']
-U2R_df_test = test_data[test_data.Class == 'U2R'] 
+DoS_df_test = test_data[test_data.Class.isin(DoSClass)]
+Probe_df_test = test_data[test_data.Class.isin(ProbeClass)]
+R2L_df_test = test_data[test_data.Class.isin(R2LClass)]
+U2R_df_test = test_data[test_data.Class.isin(U2RClass)] 
 
 # =============================================================================
 # 
