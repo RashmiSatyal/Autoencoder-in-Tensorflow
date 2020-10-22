@@ -63,6 +63,33 @@ probe_attacks=["ipsweep","nmap","portsweep","satan","saint","mscan"]
 DoS_train_df = train_data[train_data.label.isin(dos_attacks)]
 DoS_test_df = test_data[test_data.label.isin(dos_attacks)]
 
+def label_value (row):
+    if row["label"] == "normal":
+        return 0
+    if row["label"] == "snmpgetattack":
+        return 1
+    if row["label"] == "back":
+        return 2
+    if row["label"] == "land":
+        return 3
+    if row["label"] == "neptune":
+        return 4
+    if row["label"] == "smurf":
+        return 5
+    if row["label"] == "teardrop":
+        return 6
+    if row["label"] == "pod":
+        return 7
+    if row["label"] == "apache2":
+        return 8
+    if row["label"] == "udpstorm":
+        return 9
+    if row["label"] == "processtable":
+        return 10
+    return 11
+
+DoS_train_df["label"]=DoS_train_df.apply(label_value,axis=1)
+
 test_samples_length = len(DoS_test_df)
 
 DoS_train_services = DoS_train_df["service"].nunique()
