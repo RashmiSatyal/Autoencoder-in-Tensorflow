@@ -11,10 +11,15 @@ from sklearn import preprocessing
 from sklearn.preprocessing import StandardScaler
 from sklearn.feature_selection import SelectPercentile, f_classif
 from sklearn.metrics import confusion_matrix,accuracy_score,recall_score,precision_score,f1_score
+from sklearn.cluster import KMeans
+from collections import Counter, defaultdict
 
 import numpy as np
 import tensorflow as tf
 import pandas as pd
+import category_encoders as ce
+import matplotlib.pyplot as plt
+
 
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Activation
@@ -63,6 +68,8 @@ probe_attacks=["ipsweep","nmap","portsweep","satan","saint","mscan"]
 DoS_train_df = train_data[train_data.label.isin(dos_attacks)]
 DoS_test_df = test_data[test_data.label.isin(dos_attacks)]
 
+subset_normal_df = DoS_train_df[DoS_train_df["label"] == "snmpgetattack"]
+
 def label_value (row):
     if row["label"] == "normal":
         return 0
@@ -108,3 +115,30 @@ for column in df.columns :
         encode_text(DoS_train_df,DoS_test_df,column)
     elif not column == label_column:
         minmax_scale_values(DoS_train_df,DoS_test_df, column)
+
+num_rows = []
+for i in range(2,8):
+    print(i)   
+    subset_df = DoS_train_df[DoS_train_df["label"] == i]
+    num_rows.append(subset_df.shape[0])
+
+    
+wcss=[]    
+x,y=DoS_train_df,DoS_train_df.pop("label").values
+x=x.values
+kmeans = KMeans(n_clusters=6, random_state=0).fit(x)
+km_labels = kmeans.labels_
+km_total_labels = np.unique(km_labels)
+
+clusters_indices = defaultdict(list)
+for index, c  in enumerate(kmeans.labels_):
+    clusters_indices[c].append(index)
+
+#wcss.append(kmeans.inertia_)
+#
+#plt.plot(range(1,12),wcss)
+#plt.title('The Elbow Method Graph')
+#plt.xlabel('Number of clusters')
+#plt.ylabel('WCSS')
+#plt.show()
+#
