@@ -123,7 +123,7 @@ for i in range(2,8):
     num_rows.append(subset_df.shape[0])
 
     
-wcss=[]    
+
 x,y=DoS_train_df,DoS_train_df.pop("label").values
 x=x.values
 kmeans = KMeans(n_clusters=6, random_state=0).fit(x)
@@ -134,6 +134,15 @@ clusters_indices = defaultdict(list)
 for index, c  in enumerate(kmeans.labels_):
     clusters_indices[c].append(index)
 
+centroids  = kmeans.cluster_centers_
+
+
+
+#Compare centorid with each data in test
+#Add label to clusters 
+#Assign clusters' label to test data
+#https://stackoverflow.com/questions/47291025/extracting-centroids-using-k-means-clustering-in-python
+#wcss=[]    
 #wcss.append(kmeans.inertia_)
 #
 #plt.plot(range(1,12),wcss)
