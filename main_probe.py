@@ -211,6 +211,6 @@ testing_set_predictions[np.where(test_losses>threshold)]=1
 accuracy=accuracy_score(y0_testprobe,testing_set_predictions)
 
 #inline plot
-#c = confusion_matrix(y0_testdos,testing_set_predictions)
-#plot_confusion_matrix(c,["Normal","Attack"])
+c = confusion_matrix(y0_testprobe,testing_set_predictions)
+plot_confusion_matrix(c,["Normal","Probe"])
 #violin_plot(["Normal","Attack"], test_losses, y_test, threshold)
